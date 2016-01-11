@@ -1,0 +1,7 @@
+#Windows
+.settings
+build
+.classpath
+.project
+META-INF
+.jar
