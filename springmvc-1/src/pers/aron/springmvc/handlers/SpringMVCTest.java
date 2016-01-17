@@ -1,25 +1,97 @@
 package pers.aron.springmvc.handlers;
 
-import java.util.Locale;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
 
 import pers.aron.springmvc.entities.User;
 
+//@SessionAttributes(value={"user"},types={String.class})
 @RequestMapping("/springmvc")
 @Controller
 public class SpringMVCTest {
 
 	private static final String SUCCESS = "success"; 
+	/**
+	 * 有@ModelAttribute标记的方法，会在每个目标方法执行之前被SpringMVC调用
+	 * @param id
+	 * @param map
+	 */
+	@ModelAttribute
+	public void getUser(@RequestParam(value="id",required=false) Integer id,
+			Map<String,Object> map){
+		System.out.println("modelAttribute method");
+		if(id != null){
+			//模拟从数据库中获取对象
+			User user = new User(1, "tom", "123456","tom@atguigu", 12);
+			System.out.println("从数据库中获取一个对象:" + user );
+			map.put("user", user);
+		}
+	}
+	
+	@RequestMapping("/testModelAttribute")
+	public String testModelAttribute(User user){
+		System.out.println("修改: " + user);
+		return SUCCESS;
+	}
+	
+	/**
+	 * @SessionAttributes 除了可以通过属性名指定需要放到会话中的属性外(实际使用的是value属性值)，
+	 * 还可以通过模型属性的对象类型指定那些模型属性需要放到会话中(实际上使用的是types属性值)
+	 * 注意:该注解只能放在类的上面，而不能放在方法上
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/testSessionAttributes")
+	public String testSessionAttributes(Map<String,Object> map){
+		//User user = new User("Tom","123456","tom@atguigu.com",15);
+		//map.put("user", user);
+		map.put("school", "atguigu");
+		return SUCCESS;
+	}
+	
+	/**
+	 * 目标方法可以添加Map类型(实际上也可以是Model类型或ModelMap类型)的参数
+	 * @param map
+	 * @return
+	 */
+	@RequestMapping("/testMap")
+	public String testMap(Map<String,Object> map){
+		System.out.println(map.getClass().getName());
+		map.put("names",Arrays.asList("Tom","Jerry","Mike"));
+		return SUCCESS;
+	}
+	
+	/**
+	 * 目标方法的返回值可以是ModelAndView类型
+	 * 其中可以包含视图和模型信息
+	 * SpringMVC 会把ModelAndView的model中数据放入到request域对象中。
+	 * @return
+	 */
+	@RequestMapping("/testModelAndView")
+	public ModelAndView testModelAndView(){
+		String viewName = SUCCESS;
+		ModelAndView modelAndView = new ModelAndView(viewName);
+		//添加模型数据到ModelAndView中
+		modelAndView.addObject("time",new Date());
+		return modelAndView;
+	}
+	
+	
 	/**
 	 * 使用Servlet原声的 API 作为目标方法的参数
 	 * 具体支持一下类型
@@ -40,7 +112,7 @@ public class SpringMVCTest {
 	public String testServletAPI(HttpServletRequest request,
 			HttpServletResponse response){
 		System.out.println("testServletAPI," + request+ "," + response);
-		//out.write("hello springmvc") 会在页面上打印方法
+		//out.write("hello springmvc") 会在页面上打印
 		return SUCCESS;
 	}
 	
