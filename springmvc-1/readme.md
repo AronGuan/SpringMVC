@@ -19,3 +19,8 @@ URL值映射，通过@PathVariable
 使用POJO对象绑定请求参数值，参数为对象就行了  
 
 使用Servlet API作为入参
+
+模型数据  
+ModelAndView,Map及Model，SessionAttributes,ModelAttribute
+
+ModelAndView分析
