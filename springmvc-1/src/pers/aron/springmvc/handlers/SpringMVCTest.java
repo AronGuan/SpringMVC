@@ -20,17 +20,41 @@ import org.springframework.web.servlet.ModelAndView;
 
 import pers.aron.springmvc.entities.User;
 
-//@SessionAttributes(value={"user"},types={String.class})
+@SessionAttributes(value={"school"},types={String.class})
 @RequestMapping("/springmvc")
 @Controller
 public class SpringMVCTest {
-
 	private static final String SUCCESS = "success"; 
+	
+	@RequestMapping("/testRedirect")
+	public String testRedirect(){
+		System.out.println("testRedirect");
+		return "redirect:/index.jsp";
+	}
+	
+	@RequestMapping("/testView")
+	public String testView(){
+		System.out.println("testView");
+		return "helloView";
+	}
+
+
+	//都会转成ModelAndView对象，借助视图解析器得到最终的视图对象(View)物理视图
+	@RequestMapping("/testViewAndViewResolver")
+	public String testViewAndViewResolver(){
+		System.out.println(":testViewAndViewResolver");
+		return SUCCESS;
+	}
+	
 	/**
-	 * 有@ModelAttribute标记的方法，会在每个目标方法执行之前被SpringMVC调用
+	 * 1. 有@ModelAttribute标记的方法，会在每个目标方法执行之前被SpringMVC调用
+	 * 2. @ModelAttribute注解也可以来修饰目标方法POJO类型的入参，其value属性值有如下的作用:
+	 * 1) SpringMVC会使用value属性值在implicitModel中查找对应的对象，若存在则会直接传入到目标方法的入参中
+	 * 2) SpringMVC会一value为key,POJO类型的对象为value，存入到request中
 	 * @param id
 	 * @param map
 	 */
+	//用于更新部分数据
 	@ModelAttribute
 	public void getUser(@RequestParam(value="id",required=false) Integer id,
 			Map<String,Object> map){
@@ -62,7 +86,7 @@ public class SpringMVCTest {
 	 *  对应的value值，若存在则直接传入到目标方法的入参中，若不存在则将抛出异常。
 	 *  4. 若Handler没有标识@SessioinAttributes注解或@SessioinAttributes注解的value值中不包含key，则会
 	 *  通过反射来创建POJO类型的参数，传入目标方法的参数
-	 *  5. SpringMVC会把key和value保存implicitModel中，进而保存到request中。
+	 *  5. SpringMVC会把key和POJO类型的对象到保存implicitModel中，进而保存到request中。
 	 *  
 	 *  
 	 *  源代码分析的流程

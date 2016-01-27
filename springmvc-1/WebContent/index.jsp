@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,6 +8,15 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+	<a href="springmvc/testRedirect">testRedirect</a>
+	<br/>
+	<a href="springmvc/testView">testView</a>
+	<br/>
+
+	<a href="springmvc/testViewAndViewResolver">Test testViewAndViewResolver</a>
+	<br/>
+
 	<!-- 模拟修改操作
 		1.原始数据为:1,Tom,123456,tom@atguigu.com,12
 		2.密码不能被修改
