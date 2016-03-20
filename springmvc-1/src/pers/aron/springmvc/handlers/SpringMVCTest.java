@@ -25,7 +25,7 @@ import pers.aron.springmvc.entities.User;
 @Controller
 public class SpringMVCTest {
 	private static final String SUCCESS = "success"; 
-	
+	//÷ÿ∂®œÚ
 	@RequestMapping("/testRedirect")
 	public String testRedirect(){
 		System.out.println("testRedirect");
